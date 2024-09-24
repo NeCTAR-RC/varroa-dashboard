@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load tz %}
+{% block title %}{% trans "Security Risks" %}{% endblock %}
+
+{% block custom_head_js %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'js/varroa.js'%}"></script>
+{% endblock %}
+
+{% block main %}
+<div id="security_page">
+    <div class="block-title mb-2">
+        <h3>Security Risks</h3>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <p>The Nectar Cloud infrastructure is regularly scanned for vulnerabilities. Users must ensure all detected security
+                risks are actioned.</p>
+            <p>For more information about security risks and how to resolve vulnerabilities, check out <a href="#"
+                    target="_blank">this article</a> on the Nectar Support website.</p>
+            {% if risks|length >= 3 %}
+            <p class="alert alert-danger">
+                Your project currently has <strong>{{ risks|length }}</strong> security risks requiring action.
+            </p>
+            {% elif risks|length > 0 %}
+            <p class="alert alert-warning">
+                Your project currently has <strong>{{ risks|length }}</strong> security risks requiring action.
+            </p>
+            {% else %}
+            <p class="alert alert-success">
+                Your project has <strong>0</strong> security risk detected.
+            </p>
+            {% endif %}
+        </div>
+    </div>
+    {% if risks|length %}
+    <div class="row">
+        <div class="col-xs-12">
+            <h4 class="mb-4">Risks Detected</h4>
+            <div id="security_risks" class="panel-group" role="tablist" aria-multiselectable="true">
+                {% regroup risks|dictsort:"resource_id" by resource_id as risk_by_resource %}
+                {% for resource in risk_by_resource %}
+                    <div id="{{ resource.grouper }}_panel" class="panel panel-default mb-4">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                {{ resource.list.0.resource_type }} {{ resource.grouper }}
+                            </h4>
+                        </div>
+                        <div class="panel-body">
+                            <p class="mb-0">Please review the following {% if resource.list|length == 1 %}risk{% else %}risks{% endif %} for this {{ resource.list.0.resource_type }}.</p>
+                        </div>
+
+                        {% if resource.list %}<ul class="list-group" id="{{ resource.grouper }}_risks">{% endif %}
+                        {% for risk in resource.list %}
+                                <li class="list-group-item">
+                                    <h4><i class="fa fa-exclamation-circle text-danger"></i> {{ risk.type }}</h4>
+                                    <p class="mb-0">{{ risk.type.description }}. {% if risk.type.help_url %}<a href="{{ risk.type.help_url }}">Learn more<i class="fa fa-external-link ml-2"></i></a></p>{% endif %}
+                                </li>
+                        {% endfor %}
+                        {% if resource.list %}</ul>{% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    if(window.location.hash.length) {
+        securityRisks.showResourceRisks(window.location.hash);
+    }
+</script>
+
+{% endblock %}
