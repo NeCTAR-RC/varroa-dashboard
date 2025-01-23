@@ -57,6 +57,7 @@
                                 <li class="list-group-item">
                                     <h4><i class="fa fa-exclamation-circle text-danger"></i> {{ risk.type }}</h4>
                                     <p class="mb-0">{{ risk.type.description }}. {% if risk.type.help_url %}<a href="{{ risk.type.help_url }}">Learn more<i class="fa fa-external-link ml-2"></i></a></p>{% endif %}
+				                    <p><em>Last Detected: {{ risk.last_seen }}</em></p>
                                 </li>
                         {% endfor %}
                         {% if resource.list %}</ul>{% endif %}
