@@ -12,7 +12,7 @@
 # limitations under the License.
 
 
-from varroa_dashboard.api import security
+from varroa_dashboard.api.rest import security
 
 __all__ = [
     'security',
