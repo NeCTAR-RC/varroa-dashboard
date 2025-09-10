@@ -26,11 +26,11 @@
             </p>
             {% elif risks|length > 0 %}
             <p class="alert alert-warning">
-                Your project currently has <strong>{{ risks|length }}</strong> security risks requiring action.
+                Your project currently has <strong>{{ risks|length }}</strong> security risk{{ risks|pluralize }} requiring action.
             </p>
             {% else %}
             <p class="alert alert-success">
-                Your project has <strong>0</strong> security risk detected.
+                Your project has <strong>0</strong> security risks detected.
             </p>
             {% endif %}
         </div>
