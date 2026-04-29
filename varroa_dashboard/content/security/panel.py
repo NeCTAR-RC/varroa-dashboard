@@ -14,6 +14,9 @@ from django.utils.translation import gettext_lazy as _
 
 import horizon
 
+# This needed to register urls of REST API.
+from varroa_dashboard.api import rest  # noqa
+
 
 class SecurityRisks(horizon.Panel):
     name = _("Security")
